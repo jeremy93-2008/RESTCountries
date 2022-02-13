@@ -1,53 +1,70 @@
 import * as React from 'react'
+import { ChangeEvent, useCallback, useEffect } from 'react'
 import { useQuery } from '../hooks/useQuery'
-import { Countries } from '../typing'
-import { FaMoon, FaSearch } from 'react-icons/fa'
+import { Country } from '../typing'
+import { FaSearch } from 'react-icons/fa'
+import { Card } from '../components/card'
+import { Header } from './header'
+import { Dropdown } from '../components/dropdown'
 
 export function Home() {
-    const response = useQuery<Countries[]>('https://restcountries.com/v2/all')
+    const [countries, setCountries] = React.useState<Country[]>([])
+    const response = useQuery<Country[]>('https://restcountries.com/v2/all')
+
+    const onChange = useCallback(
+        (evt: ChangeEvent<HTMLInputElement>) => {
+            if (!response.data) return
+            const target = evt.target as HTMLInputElement
+            const value = target.value
+            setCountries(
+                response.data.filter((country) =>
+                    country.name.toLowerCase().includes(value.toLowerCase())
+                )
+            )
+        },
+        [countries]
+    )
+
+    useEffect(() => {
+        if (response.data) {
+            setCountries(response.data)
+        }
+    }, [response.data])
+
     return (
-        <div className="bg-gray-200 w-[100vw] min-h-[100vh]">
-            <header className="flex justify-between items-center bg-gray-50 shadow pr-20">
-                <h2 className="text-2xl font-extrabold p-5 pl-20">
-                    Where in the world?
-                </h2>
-                <div
-                    className="flex justify-center items-center p-2 font-[600] cursor-pointer rounded transition-all
-                hover:bg-gray-700 hover:text-white"
-                >
-                    <FaMoon />
-                    <span className="ml-3">Dark Mode</span>
-                </div>
-            </header>
+        <div className="bg-gray-200 w-[100vw] min-h-[100vh] dark:bg-background-dark transition-all">
+            <Header />
             <main className="px-20 py-14">
-                <nav className="">
-                    <section className="inline-flex justify-between items-center bg-gray-50 inline-block px-5 py-2 rounded shadow">
+                <nav className="flex items-center justify-between pr-14">
+                    <section className="inline-flex justify-between items-center bg-gray-50 inline-block px-5 py-2 rounded shadow dark:bg-element-dark">
                         <FaSearch className="text-xl flex-1 text-gray-400 mr-5" />
                         <input
-                            className="bg-gray-50 flex-5 py-2 w-[400px]"
+                            className="bg-gray-50 flex-5 py-2 w-[400px] outline-none transition-all bg-transparent dark:text-white"
                             type="text"
-                            placeholder="Search for Countries"
+                            onChange={(event) => onChange(event)}
+                            placeholder="Search for Countries..."
+                        />
+                    </section>
+                    <section className="dropdown-region">
+                        <Dropdown
+                            label="Filter by Region"
+                            options={[
+                                'Africa',
+                                'America',
+                                'Asia',
+                                'Europe',
+                                'Oceania',
+                            ]}
+                            onChange={() => {}}
                         />
                     </section>
                 </nav>
-                <section className="mt-16">
-                    {response.loading ? (
+                <section className="grid grid-cols-[_repeat(auto-fill,_280px)_] mt-16">
+                    {!countries ? (
                         <div>Loading...</div>
                     ) : (
-                        response?.data.map((country) => {
-                            return (
-                                <article
-                                    className="bg-gray-50 p-5 rounded shadow mt-4"
-                                    key={country.name}
-                                >
-                                    <h3 className="text-xl font-bold">
-                                        {country.name}
-                                    </h3>
-                                    <p className="text-gray-400">
-                                        {country.capital}
-                                    </p>
-                                </article>
-                            )
+                        countries.map((country) => {
+                            return <Card country={country} />
                         })
                     )}
                 </section>

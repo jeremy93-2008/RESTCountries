@@ -1,4 +1,4 @@
-export interface Countries {
+export interface Country {
     alpha2Code: string
     alpha3Code: string
     altSpellings: string[]
