@@ -1,10 +1,15 @@
 import * as React from 'react'
-import { Home } from './templates/home'
+import { Home } from './pages/home'
+import { HashRouter, Route, Routes } from 'react-router-dom'
+import { Detail } from './pages/detail'
 
 export function App() {
     return (
-        <div>
-            <Home />
-        </div>
+        <HashRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/detail/:name" element={<Detail />} />
+            </Routes>
+        </HashRouter>
     )
 }

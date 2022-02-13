@@ -1,10 +1,17 @@
 import * as React from 'react'
 import { Country } from '../typing'
 
-export function Card({ country }: { country: Country }) {
+export function Card({
+    onClick,
+    country,
+}: {
+    onClick: () => void
+    country: Country
+}) {
     return (
         <article
-            className="relative z-0 bg-gray-50 rounded shadow mb-6 mr-12 cursor-pointer
+            onClick={onClick}
+            className="relative z-0 bg-gray-50 rounded shadow mb-6 mr-12 cursor-pointer h-[420px] w-[260px]
                                     overflow-hidden transition-all hover:scale-110 dark:bg-element-dark"
             key={country.name}
         >
