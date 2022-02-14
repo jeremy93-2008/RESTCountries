@@ -11,7 +11,7 @@ import { useSearchCountry } from '../hooks/useSearchCountry'
 import { useNavigate } from 'react-router-dom'
 
 export function Home() {
-    const [countries, setCountries] = React.useState<Country[]>(null)
+    const [countries, setCountries] = React.useState<Country[] | null>(null)
     const navigate = useNavigate()
     const response = useQuery<Country[]>('https://restcountries.com/v2/all')
 
@@ -70,13 +70,14 @@ export function Home() {
                 </nav>
                 <section className="grid grid-cols-[_repeat(auto-fill,_280px)_] mt-16">
                     {!countries ? (
-                        <div className="text-2xl">
-                            <FiLoader />
+                        <div className="col-span-full flex justify-center">
+                            <FiLoader className="animate-spin text-4xl text-gray-500 dark:text-white" />
                         </div>
                     ) : (
                         countries.map((country) => {
                             return (
                                 <Card
+                                    key={country.name}
                                     onClick={() =>
                                         navigate('/detail/' + country.name)
                                     }

@@ -17,7 +17,7 @@ export interface Country {
         iso639_2: string
         name: string
         nativeName: string
-    }
+    }[]
     latlng: number[]
     name: string
     nativeName: string

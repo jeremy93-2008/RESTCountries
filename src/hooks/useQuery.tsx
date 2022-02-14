@@ -17,11 +17,15 @@ export function useQuery<T>(url: string, options?: IQueryOptions) {
         const cacheResponse = getCache()
         const method = options?.method || 'GET'
         if (options?.skip) return
-        if (cacheResponse && !options?.renew) return setResponse(cacheResponse)
+        if (cacheResponse && !options?.renew) {
+            loading.current = false
+            return setResponse({ data: cacheResponse })
+        }
         fetch(url, { method })
             .then(async (response: Response) => {
                 loading.current = false
                 const data = await response.json()
+                setCache(data)
                 setResponse({ response, data })
                 return data
             })
