@@ -13,13 +13,13 @@ export function BorderCountries({ codes }: { codes: string[] }) {
     }, [response])
 
     return (
-        <div className="inline-flex">
+        <div className="inline-flex flex-wrap">
             {borderCountries.map((country) => (
                 <Link
-                    key={country.alpha3Code}
-                    to={`/detail/${country.name}`}
-                    className="flex items-center px-6 py-2 bg-white text-sm shadow-md rounded
-                        dark:bg-element-dark dark:text-white dark:shadow-gray-900 mr-2"
+                    key={country.name}
+                    to={`/detail/${country.alpha3Code}`}
+                    className="flex items-center mt-2 px-6 py-2 bg-white text-sm shadow-md rounded
+                        dark:bg-element-dark dark:text-white dark:shadow-gray-900 mr-2 transition-all hover:scale-110"
                 >
                     <div>{country.name}</div>
                 </Link>

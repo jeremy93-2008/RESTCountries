@@ -1,5 +1,6 @@
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa'
 import * as React from 'react'
+import { useEffect, useRef } from 'react'
 
 interface DropdownProps {
     label: string
@@ -8,6 +9,7 @@ interface DropdownProps {
 }
 
 export function Dropdown({ label, options, onChange }: DropdownProps) {
+    const refParent = useRef<HTMLDivElement>(document.createElement('div'))
     const [isOpen, setOpen] = React.useState(false)
     const [selected, setSelected] = React.useState<string | null>(null)
 
@@ -21,8 +23,19 @@ export function Dropdown({ label, options, onChange }: DropdownProps) {
         onChange(value)
     }
 
+    useEffect(() => {
+        const onClickOutsideDropdown = (evt: MouseEvent) => {
+            const target = evt.target as HTMLElement
+            if (!refParent.current.contains(target)) setOpen(false)
+        }
+        document.addEventListener('click', onClickOutsideDropdown)
+        return () => {
+            document.removeEventListener('click', onClickOutsideDropdown)
+        }
+    }, [])
+
     return (
-        <>
+        <div ref={refParent} className="dropdown-container">
             <button
                 onClick={() => setOpen(!isOpen)}
                 className="flex justify-start bg-gray-50 text-black p-4 rounded shadow dark:bg-element-dark dark:text-white"
@@ -56,6 +69,6 @@ export function Dropdown({ label, options, onChange }: DropdownProps) {
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     )
 }

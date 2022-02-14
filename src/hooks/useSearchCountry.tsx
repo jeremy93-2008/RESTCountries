@@ -33,7 +33,7 @@ export function useSearchCountry(
                 })
             onSearchCountries({ textValue: inputValue, regionValue: value })
         },
-        [inputValue]
+        [inputValue, data]
     )
 
     const onSearchCountries = useCallback(

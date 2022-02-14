@@ -42,19 +42,19 @@ export function Home() {
     return (
         <div className="bg-gray-200 w-[100vw] min-h-[100vh] dark:bg-background-dark transition-all">
             <Header />
-            <main className="px-20 py-14">
-                <nav className="flex items-center justify-between pr-14">
-                    <section className="inline-flex justify-between items-center bg-gray-50 inline-block px-5 py-2 rounded shadow dark:bg-element-dark">
-                        <FaSearch className="text-xl flex-1 text-gray-400 mr-5" />
+            <main className="flex flex-col items-center relative lg:px-20 px-5 py-14">
+                <nav className="flex lg:flex-row flex-col lg:items-center items-start justify-between lg:px-20 w-full">
+                    <section className="inline-flex justify-between items-center bg-gray-50 w-full lg:w-[450px] inline-block px-5 py-2 rounded shadow dark:bg-element-dark">
+                        <FaSearch className="text-xl  flex-2 text-gray-400 mr-5" />
                         <input
-                            className="bg-gray-50 flex-5 py-2 w-[400px] outline-none transition-all bg-transparent dark:text-white"
+                            className="bg-gray-50 flex-5 py-2 lg:w-[400px] w-full outline-none transition-all bg-transparent dark:text-white"
                             type="text"
                             onChange={(event) => onInputChange(event)}
                             placeholder="Search for Countries..."
                             value={inputValue}
                         />
                     </section>
-                    <section className="dropdown-region">
+                    <section className="dropdown-region mt-5 lg:mt-0">
                         <Dropdown
                             label="Filter by Region"
                             options={[
@@ -68,7 +68,7 @@ export function Home() {
                         />
                     </section>
                 </nav>
-                <section className="grid grid-cols-[_repeat(auto-fill,_280px)_] mt-16">
+                <section className="grid grid-cols-[_repeat(auto-fill,_280px)_] justify-center mt-16 w-full">
                     {!countries ? (
                         <div className="col-span-full flex justify-center">
                             <FiLoader className="animate-spin text-4xl text-gray-500 dark:text-white" />
@@ -79,7 +79,9 @@ export function Home() {
                                 <Card
                                     key={country.name}
                                     onClick={() =>
-                                        navigate('/detail/' + country.name)
+                                        navigate(
+                                            '/detail/' + country.alpha3Code
+                                        )
                                     }
                                     country={country}
                                 />
